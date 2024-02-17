@@ -2,12 +2,14 @@
 
 bool isFileReadable = false;
 var fileContents = default(string);
+var fileName = default(string);
+
 do
 {
     try
     {
         Console.WriteLine("Enter the name of the file you want to read: ");
-        var fileName = Console.ReadLine();
+        fileName = Console.ReadLine();
 
         fileContents = File.ReadAllText(fileName);
         isFileReadable = true;
@@ -27,7 +29,15 @@ do
     
 } while (!isFileReadable);
 
-var videoGames = JsonSerializer.Deserialize<List<VideoGame>>(fileContents);
+var videoGames = default(List<VideoGame>);
+try
+{
+    videoGames = JsonSerializer.Deserialize<List<VideoGame>>(fileContents);
+}
+catch (JsonException jsonException)
+{
+    throw new JsonException($"{jsonException.Message}. The file is: {fileName}", jsonException);
+}
 
 if (videoGames.Count > 0)
 {
