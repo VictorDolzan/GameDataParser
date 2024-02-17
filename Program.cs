@@ -1,9 +1,31 @@
 ﻿using System.Text.Json;
 
-Console.WriteLine("Enter the name of the file you want to read: ");
-var fileName = Console.ReadLine();
+bool isFileReadable = false;
+var fileContents = default(string);
+do
+{
+    try
+    {
+        Console.WriteLine("Enter the name of the file you want to read: ");
+        var fileName = Console.ReadLine();
 
-var fileContents = File.ReadAllText(fileName);
+        fileContents = File.ReadAllText(fileName);
+        isFileReadable = true;
+    }
+    catch (ArgumentNullException argument)
+    {
+        Console.WriteLine($"The file name can't be null.");
+    }
+    catch (ArgumentException argException)
+    {
+        Console.WriteLine($"{argException.Message}");
+    }
+    catch (FileNotFoundException fileNotFoundException)
+    {
+        Console.WriteLine($"{fileNotFoundException.Message}");
+    }
+    
+} while (!isFileReadable);
 
 var videoGames = JsonSerializer.Deserialize<List<VideoGame>>(fileContents);
 
@@ -18,9 +40,10 @@ if (videoGames.Count > 0)
 }
 else
 {
-    Console.WriteLine("No games are present in the input file"); 
+    Console.WriteLine("No games are present in the input file."); 
 }
 
+Console.WriteLine("Press any key to shut down the process.");
 Console.ReadKey();
 
 
