@@ -1,4 +1,4 @@
-namespace GameDataParser;
+namespace GameDataParser.Logging;
 
 public class Logger
 {
