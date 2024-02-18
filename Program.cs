@@ -36,6 +36,14 @@ try
 }
 catch (JsonException jsonException)
 {
+    var originalConsoleForegroundColor = Console.ForegroundColor;
+    
+    Console.ForegroundColor = ConsoleColor.Red;
+    Console.WriteLine($"JSON in {fileName} file was not in a valid format. JSON body: ");
+    Console.WriteLine(fileContents);
+
+    Console.ForegroundColor = originalConsoleForegroundColor;
+    
     throw new JsonException($"{jsonException.Message}. The file is: {fileName}", jsonException);
 }
 
